@@ -1,28 +1,31 @@
 package cn.edu.cug.cs.gtl.ml.dataset;
 
+import jsat.linear.Vec;
+
 import java.io.*;
 import java.util.List;
 
-public class TestSet<S, L> extends DefaultDataSet<S, L> {
+public class TestSet<T extends NumericalData> extends DataSet<T> {
 
-    protected TestSet() {
+    /**
+     * Creates a new dataset containing the given datapoints. The number of
+     * features and categorical data information will be obtained from the
+     * DataStore.
+     *
+     * @param datapoints the collection of data points to create a dataset from
+     */
+    public TestSet(DataStore<T> datapoints) {
+        super(datapoints);
     }
 
-    public TestSet(List<S> samples, List<L> labels) {
-        super(samples, labels);
+    /**
+     * Creates a new empty data set
+     *
+     * @param numerical  the number of numerical features for points in this
+     *                   dataset
+     * @param categories the information and number of categorical features in
+     */
+    public TestSet(int numerical, CategoricalData[] categories) {
+        super(numerical, categories);
     }
-
-    @Override
-    public Object clone() {
-        TestSet<S, L> ts = new TestSet<S, L>();
-        try {
-            byte[] bytes = this.storeToByteArray();
-            ts.loadFromByteArray(bytes);
-            return ts;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

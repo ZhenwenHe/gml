@@ -1,12 +1,27 @@
 package cn.edu.cug.cs.gtl.ml.distances;
 
 import cn.edu.cug.cs.gtl.array.Array;
+import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
+import jsat.linear.Vec;
+import jsat.linear.distancemetrics.EuclideanDistance;
 
 import java.util.List;
 
-public interface DistanceMetrics<T> {
+public interface DistanceMetric<T extends NumericalData> extends jsat.linear.distancemetrics.DistanceMetric{
     double distance(T a, T b);
 
+    /**
+     * Computes the distance between 2 vectors.
+     * The smaller the value, the closer, and there for,
+     * more similar, the vectors are. 0 indicates the vectors are the same.
+     *
+     * @param a the first vector
+     * @param b the second vector
+     * @return the distance between them
+     */
+    default double dist(Vec a, Vec b){
+        return distance((T)a,(T)b);
+    }
     /**
      * 计算两个数据集合中每条时序数据对象之间的距离
      *
@@ -58,4 +73,27 @@ public interface DistanceMetrics<T> {
         }
         return Array.of(n, m, dist);
     }
+
+    default boolean isSymmetric()
+    {
+        return true;
+    }
+
+
+    default boolean isSubadditive()
+    {
+        return true;
+    }
+
+    default boolean isIndiscemible()
+    {
+        return true;
+    }
+
+    default double metricBound()
+    {
+        return Double.POSITIVE_INFINITY;
+    }
+
+
 }

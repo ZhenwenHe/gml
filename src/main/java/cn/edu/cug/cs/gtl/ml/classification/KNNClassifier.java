@@ -1,21 +1,22 @@
 package cn.edu.cug.cs.gtl.ml.classification;
 
-import cn.edu.cug.cs.gtl.ml.distances.DistanceMetrics;
+import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
+import cn.edu.cug.cs.gtl.ml.dataset.Sample;
+import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
-import cn.edu.cug.cs.gtl.ml.dataset.TestSet;
-import cn.edu.cug.cs.gtl.ml.distances.DistanceMetrics;
+import jsat.linear.Vec;
 
 
 import java.util.*;
 
-public class KNNClassifier<S, L> extends DefaultClassifier<S, L> {
+public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier<S, L> {
 
     private int m_kNN;
 
     protected KNNClassifier() {
     }
 
-    public KNNClassifier(DataSet<S, L> trainSet, DataSet<S, L> testSet, DistanceMetrics<S> distanceMetrics) {
+    public KNNClassifier(DataSet<S> trainSet, DataSet<S> testSet, DistanceMetric<S> distanceMetrics) {
         super(trainSet, testSet, distanceMetrics);
     }
 
@@ -154,16 +155,16 @@ public class KNNClassifier<S, L> extends DefaultClassifier<S, L> {
 
 
     @Override
-    public Iterable<L> predict(Iterable<S> testSamples) {
+    public Iterable<L> predict(Iterable<Sample<S>> testSamples) {
         long trainDataLen = this.trainSet.size();
         List<L> labelList = new ArrayList<>();
         m_kNN = 10;
         NeighborList neighborList = new NeighborList(m_kNN);
-        for (S i : testSamples) {
+        for (Sample<S> i : testSamples) {
             for (int j = 0; j < trainDataLen; ++j) {
-                double tempDis = this.distanceMetrics.distance(i, this.trainSet.getSample(j));
+                double tempDis = this.distanceMetrics.distance((S)(i.getNumericalData()), (S)(this.trainSet.getSample(j).getNumericalData()));
                 if (neighborList.isEmpty() || j < m_kNN || tempDis <= neighborList.m_Last.m_Distance) {
-                    neighborList.insertSorted(tempDis, trainSet.getLabel(j));
+                    neighborList.insertSorted(tempDis, (L)trainSet.getSample(j).getCategoricalLabel(0));
                 }
             }
             labelList.add(computeDistribution(neighborList));

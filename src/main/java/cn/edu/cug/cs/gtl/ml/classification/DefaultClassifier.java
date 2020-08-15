@@ -1,48 +1,51 @@
 package cn.edu.cug.cs.gtl.ml.classification;
 
-import cn.edu.cug.cs.gtl.ml.distances.DistanceMetrics;
+import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
+import cn.edu.cug.cs.gtl.ml.dataset.Sample;
+import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
+import jsat.linear.Vec;
 
-public abstract class DefaultClassifier<S, L> implements Classifier<S, L> {
-    DataSet<S, L> trainSet = null;
-    DataSet<S, L> testSet = null;
-    DistanceMetrics<S> distanceMetrics = null;
+public abstract class DefaultClassifier<S extends NumericalData, L> implements Classifier<S, L> {
+    protected DataSet<S> trainSet = null;
+    protected DataSet<S> testSet = null;
+    protected DistanceMetric<S> distanceMetrics = null;
 
     protected DefaultClassifier() {
     }
 
-    public DefaultClassifier(DataSet<S, L> trainSet, DataSet<S, L> testSet, DistanceMetrics<S> distanceMetrics) {
+    public DefaultClassifier(DataSet<S> trainSet, DataSet<S> testSet, DistanceMetric<S> distanceMetrics) {
         this.trainSet = trainSet;
         this.testSet = testSet;
         this.distanceMetrics = distanceMetrics;
     }
 
     @Override
-    public void setDistanceMetrics(DistanceMetrics<S> distanceMetrics) {
+    public void setDistanceMetrics(DistanceMetric<S> distanceMetrics) {
         this.distanceMetrics = distanceMetrics;
     }
 
     @Override
-    public DistanceMetrics<S> getDistanceMetrics() {
+    public DistanceMetric<S> getDistanceMetrics() {
         return this.distanceMetrics;
     }
 
     @Override
-    public void fit(DataSet<S, L> trainSet) {
+    public void fit(DataSet<S> trainSet) {
         this.trainSet = trainSet;
     }
 
     @Override
-    public abstract Iterable<L> predict(Iterable<S> testSamples);
+    public abstract Iterable<L> predict(Iterable<Sample<S>> testSamples);
 
     @Override
-    public double score(DataSet<S, L> testSet, Iterable<L> predictedLabels) {
+    public double score(DataSet<S> testSet, int j, Iterable<L> predictedLabels) {
         this.testSet = testSet;
         double probs = 0.0;
         int count = 0;
         int i = 0;
         for (L p : predictedLabels) {
-            if (this.testSet.getLabel(i).equals(p))
+            if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p))
                 count++;
             ++i;
         }
@@ -51,22 +54,22 @@ public abstract class DefaultClassifier<S, L> implements Classifier<S, L> {
     }
 
     @Override
-    public DataSet<S, L> getTrainSet() {
+    public DataSet<S> getTrainSet() {
         return this.trainSet;
     }
 
     @Override
-    public DataSet<S, L> getTestSet() {
+    public DataSet<S> getTestSet() {
         return this.testSet;
     }
 
     @Override
-    public void setTrainSet(DataSet<S, L> dataSet) {
+    public void setTrainSet(DataSet<S> dataSet) {
         this.trainSet = dataSet;
     }
 
     @Override
-    public void setTestSet(DataSet<S, L> dataSet) {
+    public void setTestSet(DataSet<S> dataSet) {
         this.testSet = dataSet;
     }
 }
