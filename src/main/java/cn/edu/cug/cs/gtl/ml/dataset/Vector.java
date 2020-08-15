@@ -18,8 +18,8 @@ public class Vector extends NumericalData
 
     private static final long serialVersionUID = 5549589219061373839L;
     protected double[] array;
-    private int startIndex;
-    private int endIndex;
+    protected int startIndex;
+    protected int endIndex;
 
     /**
      * Creates a new Dense Vector of zeros
@@ -240,9 +240,9 @@ public class Vector extends NumericalData
         return dot;
     }
 
-    public jsat.linear.DenseVector deepCopy()
+    public Vector deepCopy()
     {
-        return new jsat.linear.DenseVector(Arrays.copyOf(array, array.length));
+        return new Vector(Arrays.copyOf(array, array.length));
     }
 
     @Override

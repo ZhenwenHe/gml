@@ -96,4 +96,7 @@ public interface DistanceMetric<T extends NumericalData> extends jsat.linear.dis
     }
 
 
+    default DistanceMetric<T> clone(){
+        return null;
+    }
 }
