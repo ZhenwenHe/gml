@@ -1,23 +1,33 @@
 package cn.edu.cug.cs.gtl.ml.classification;
 
+import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
 import cn.edu.cug.cs.gtl.ml.dataset.Sample;
 import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
-import jsat.linear.Vec;
 
 
 import java.util.*;
 
-public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier<S, L> {
+public class KNNClassifier<KernelType extends NumericalData, LabelType extends Label> extends DefaultClassifier<KernelType, LabelType> {
 
     private int m_kNN;
 
     protected KNNClassifier() {
     }
 
-    public KNNClassifier(DataSet<S> trainSet, DataSet<S> testSet, DistanceMetric<S> distanceMetrics) {
+    public KNNClassifier(DataSet<KernelType> trainSet, DataSet<KernelType> testSet, DistanceMetric<KernelType> distanceMetrics) {
         super(trainSet, testSet, distanceMetrics);
+    }
+
+    @Override
+    public void fit(DataSet<KernelType> trainSet) {
+        setTrainSet(trainSet);
+    }
+
+    @Override
+    public LabelType predict(Sample<KernelType> testSample) {
+        return null;
     }
 
     /**
@@ -26,16 +36,16 @@ public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier
     private class NeighborNode {
 
         private double m_Distance;
-        private L m_Label;
+        private LabelType m_Label;
         private NeighborNode m_Next;
 
-        public NeighborNode(double distance, L label, NeighborNode next) {
+        public NeighborNode(double distance, LabelType label, NeighborNode next) {
             m_Distance = distance;
             m_Label = label;
             m_Next = next;
         }
 
-        public NeighborNode(double distance, L label) {
+        public NeighborNode(double distance, LabelType label) {
             this(distance, label, null);
         }
 
@@ -72,7 +82,7 @@ public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier
          * 把距离和标签一同插入进去，通过距离之间的比较，最后留下距离最小的K个值以及标签形成链表
          */
 
-        public void insertSorted(double distance, L label) {
+        public void insertSorted(double distance, LabelType label) {
             if (isEmpty()) {
                 m_First = m_Last = new NeighborNode(distance, label);
             } else {
@@ -128,14 +138,14 @@ public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier
 
     }
 
-    public L computeDistribution(NeighborList neighborList) {
-        HashMap<L, Integer> hashMap = new HashMap<L, Integer>();
-        Set<L> labels = hashMap.keySet();
+    public LabelType computeDistribution(NeighborList neighborList) {
+        HashMap<LabelType, Integer> hashMap = new HashMap<LabelType, Integer>();
+        Set<LabelType> labels = hashMap.keySet();
         int max_value = 0;
-        L proLabel = null;
+        LabelType proLabel = null;
         NeighborNode current = neighborList.m_First;
         for (; current.m_Next != null; current = current.m_Next) {
-            L label = current.m_Label;
+            LabelType label = current.m_Label;
             if (labels.contains(label)) {
                 Integer number = hashMap.get(label);
                 number++;
@@ -144,7 +154,7 @@ public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier
                 hashMap.put(label, 1);
             }
         }
-        for (Map.Entry<L, Integer> entry : hashMap.entrySet()) {
+        for (Map.Entry<LabelType, Integer> entry : hashMap.entrySet()) {
             if (entry.getValue() > max_value) {
                 max_value = entry.getValue();
                 proLabel = entry.getKey();
@@ -155,20 +165,21 @@ public class KNNClassifier<S extends NumericalData, L> extends DefaultClassifier
 
 
     @Override
-    public Iterable<L> predict(Iterable<Sample<S>> testSamples) {
+    public Iterable<LabelType> predict(Iterable<Sample<KernelType>> testSamples) {
         long trainDataLen = this.trainSet.size();
-        List<L> labelList = new ArrayList<>();
+        List<LabelType> labelList = new ArrayList<>();
         m_kNN = 10;
         NeighborList neighborList = new NeighborList(m_kNN);
-        for (Sample<S> i : testSamples) {
+        for (Sample<KernelType> i : testSamples) {
             for (int j = 0; j < trainDataLen; ++j) {
-                double tempDis = this.distanceMetrics.distance((S)(i.getNumericalData()), (S)(this.trainSet.getSample(j).getNumericalData()));
+                double tempDis = this.distanceMetrics.distance((KernelType)(i.getNumericalData()), (KernelType)(this.trainSet.getSample(j).getNumericalData()));
                 if (neighborList.isEmpty() || j < m_kNN || tempDis <= neighborList.m_Last.m_Distance) {
-                    neighborList.insertSorted(tempDis, (L)trainSet.getSample(j).getCategoricalLabel(0));
+                    neighborList.insertSorted(tempDis, newLabel(trainSet.getSample(j).getCategoricalLabel(0)));
                 }
             }
             labelList.add(computeDistribution(neighborList));
         }
         return labelList;
     }
+
 }

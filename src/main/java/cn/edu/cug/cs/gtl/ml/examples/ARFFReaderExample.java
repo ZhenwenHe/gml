@@ -1,16 +1,14 @@
 package cn.edu.cug.cs.gtl.ml.examples;
 
-import java.io.File;
-import jsat.io.ARFFLoader;
-import jsat.DataSet;
-import jsat.classifiers.DataPoint;
+import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
+import cn.edu.cug.cs.gtl.ml.dataset.Sample;
+import cn.edu.cug.cs.gtl.ml.io.ARFFReader;
 
+import java.io.File;
 /**
  * A simple example on loading up a data set.
- *
- * @author Edward Raff
  */
-public class LoadARFFData
+public class ARFFReaderExample
 {
 
     /**
@@ -22,7 +20,7 @@ public class LoadARFFData
                 +"git" + File.separator + "data" + File.separator
                 +"weka" + File.separator ;
         File file = new File(nominalPath + "iris.arff");
-        DataSet dataSet = ARFFLoader.loadArffFile(file);
+        DataSet dataSet = ARFFReader.read(file);
         System.out.println("There are " + dataSet.getNumFeatures() + " features for this data set.");
         System.out.println(dataSet.getNumCategoricalVars() + " categorical features");
         System.out.println("They are:");
@@ -36,7 +34,7 @@ public class LoadARFFData
         System.out.println("\nThe whole data set");
         for(int i = 0; i < dataSet.size(); i++)
         {
-            DataPoint dataPoint = dataSet.getDataPoint(i);
+            Sample dataPoint = dataSet.getSample(i);
             System.out.println(dataPoint);
         }
 

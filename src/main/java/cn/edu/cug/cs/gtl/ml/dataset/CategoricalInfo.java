@@ -1,6 +1,5 @@
 package cn.edu.cug.cs.gtl.ml.dataset;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,12 +8,12 @@ import java.util.List;
  * “集体”、“私营”和“其他经济”就是分类数据。为了便于计算机处理，通常用数字代码来表述各个类别，比如，用1表示“男性”，
  * 0表示“女性”，但是1和0等只是数据的代码，它们之间没有数量上的关系和差异。
  */
-public class CategoricalData extends jsat.classifiers.CategoricalData{
-    public CategoricalData(int n) {
+public class CategoricalInfo extends jsat.classifiers.CategoricalData{
+    public CategoricalInfo(int n) {
         super(n);
     }
 
-    public CategoricalData(String categoryName, List<String> optionNames) {
+    public CategoricalInfo(String categoryName, List<String> optionNames) {
         super(optionNames.size());
         setCategoryName(categoryName);
         int i=0;
@@ -23,6 +22,17 @@ public class CategoricalData extends jsat.classifiers.CategoricalData{
             ++i;
         }
     }
+
+    public CategoricalInfo(jsat.classifiers.CategoricalData categoricalData) {
+        super(categoricalData.getNumOfCategories());
+        setCategoryName(categoricalData.getCategoryName());
+        int s=categoricalData.getNumOfCategories();
+        for(int i=0;i<s;++i){
+            setOptionName(categoricalData.getOptionName(i),i);
+            ++i;
+        }
+    }
+
 
     /**
      * 获取该字段下的所有选项值个数
@@ -33,10 +43,10 @@ public class CategoricalData extends jsat.classifiers.CategoricalData{
     }
 
 
-    public CategoricalData clone()
+    public CategoricalInfo clone()
     {
         int n = getNumberOfOptions();
-        CategoricalData copy = new CategoricalData(n);
+        CategoricalInfo copy = new CategoricalInfo(n);
 
         if(n>0) {
             for(int i=0;i<n;++i)
@@ -45,9 +55,9 @@ public class CategoricalData extends jsat.classifiers.CategoricalData{
         return copy;
     }
 
-    public static CategoricalData[] copyOf(CategoricalData[] orig)
+    public static CategoricalInfo[] copyOf(CategoricalInfo[] orig)
     {
-        CategoricalData[] copy = new CategoricalData[orig.length];
+        CategoricalInfo[] copy = new CategoricalInfo[orig.length];
         for(int i = 0; i < copy.length; i++)
             copy[i] = orig[i].clone();
         return copy;

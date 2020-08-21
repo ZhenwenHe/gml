@@ -1,11 +1,6 @@
 package cn.edu.cug.cs.gtl.ml.dataset;
 
-import jsat.linear.Vec;
-
-import java.io.IOException;
-import java.util.List;
-
-public class TrainSet<T extends NumericalData> extends DataSet<T> {
+public class TrainSet<KernelType extends NumericalData> extends DataSet<KernelType> {
 
     /**
      * Creates a new dataset containing the given datapoints. The number of
@@ -14,8 +9,8 @@ public class TrainSet<T extends NumericalData> extends DataSet<T> {
      *
      * @param datapoints the collection of data points to create a dataset from
      */
-    public TrainSet(DataStore<T> datapoints) {
-        super(datapoints);
+    public TrainSet(DataStore<KernelType> datapoints, Class<KernelType> tClass) {
+        super(datapoints,tClass);
     }
 
     /**
@@ -25,7 +20,8 @@ public class TrainSet<T extends NumericalData> extends DataSet<T> {
      *                   dataset
      * @param categories the information and number of categorical features in
      */
-    public TrainSet(int numerical, CategoricalData[] categories) {
-        super(numerical, categories);
+    public TrainSet(int numerical, CategoricalInfo[] categories, Class<KernelType> tClass) {
+
+        super(numerical, categories,tClass);
     }
 }

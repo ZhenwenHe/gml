@@ -1,23 +1,25 @@
 package cn.edu.cug.cs.gtl.ml.clustering;
 
-import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
-import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
-import cn.edu.cug.cs.gtl.ml.dataset.Sample;
+import cn.edu.cug.cs.gtl.ml.dataset.*;
 import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
-import jsat.linear.Vec;
+import jsat.classifiers.DataPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 聚类的时候，测试数据集和训练数据集为同一个数据集
- * @param <S>
- * @param <L>
+ * @param <KernelType>
+ * @param <LabelType>
  */
-public abstract class DefaultClusterer<S extends NumericalData,L> extends jsat.clustering.ClustererBase implements Clusterer<S,L>{
-    protected DataSet<S> trainSet = null;//没有训练集，直接指向测试数据集
-    protected DataSet<S> testSet = null;
-    protected DistanceMetric<S> distanceMetrics = null;
+public abstract class DefaultClusterer<KernelType extends NumericalData, LabelType extends Label>  implements Clusterer<KernelType, LabelType>{
+    protected DataSet<KernelType> trainSet = null;//没有训练集，直接指向测试数据集
+    protected DataSet<KernelType> testSet = null;
+    protected DistanceMetric<KernelType> distanceMetrics = null;
+    protected Class<KernelType> kernelClass= (Class<KernelType>) Vector.class;
+    protected Class<LabelType>  labelClass=(Class<LabelType>) Label.class;
 
-
-    public DefaultClusterer(DataSet<S> dataSet, DistanceMetric<S> distanceMetrics) {
+    public DefaultClusterer(DataSet<KernelType> dataSet, DistanceMetric<KernelType> distanceMetrics) {
         this.trainSet = dataSet;
         this.testSet = dataSet;
         this.distanceMetrics = distanceMetrics;
@@ -28,31 +30,31 @@ public abstract class DefaultClusterer<S extends NumericalData,L> extends jsat.c
     }
 
     @Override
-    public void setDistanceMetrics(DistanceMetric<S> distanceMetrics) {
+    public void setDistanceMetric(DistanceMetric<KernelType> distanceMetrics) {
         this.distanceMetrics = distanceMetrics;
     }
 
     @Override
-    public DistanceMetric<S> getDistanceMetrics() {
+    public DistanceMetric<KernelType> getDistanceMetric() {
         return this.distanceMetrics;
     }
 
     @Override
-    public void fit(DataSet<S> dataSet) {
+    public void fit(DataSet<KernelType> dataSet) {
         this.testSet = dataSet;
         this.trainSet = dataSet;
     }
 
     @Override
-    public abstract Iterable<L> predict(Iterable<Sample<S>> testSamples);
+    public abstract LabelType predict(Sample<KernelType> testSample);
 
     @Override
-    public double score(DataSet<S> testSet,int j, Iterable<L> predictedLabels) {
+    public double score(DataSet<KernelType> testSet, int j, Iterable<LabelType> predictedLabels) {
         this.testSet = testSet;
         double probs = 0.0;
         int count = 0;
         int i = 0;
-        for (L p : predictedLabels) {
+        for (LabelType p : predictedLabels) {
             if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p))
                 count++;
             ++i;
@@ -62,24 +64,66 @@ public abstract class DefaultClusterer<S extends NumericalData,L> extends jsat.c
     }
 
     @Override
-    public DataSet<S> getTrainSet() {
+    public DataSet<KernelType> getTrainSet() {
         return this.trainSet;
     }
 
     @Override
-    public DataSet<S> getTestSet() {
+    public DataSet<KernelType> getTestSet() {
         return this.testSet;
     }
 
     @Override
-    public void setTrainSet(DataSet<S> dataSet) {
+    public void setTrainSet(DataSet<KernelType> dataSet) {
         this.trainSet = dataSet;
         this.testSet = dataSet;
     }
 
     @Override
-    public void setTestSet(DataSet<S> dataSet) {
+    public void setTestSet(DataSet<KernelType> dataSet) {
         this.trainSet = dataSet;
         this.testSet = dataSet;
+    }
+
+
+
+    @Override
+    public void setKernelClass(Class<KernelType> cls){
+        kernelClass=cls;
+    }
+
+    @Override
+    public void setLabelClass(Class<LabelType> cls){
+        labelClass=cls;
+    }
+
+    @Override
+    public Class<KernelType> getKernelClass( ){
+        return kernelClass;
+    }
+
+    @Override
+    public Class<LabelType> getLabelClass( ){
+        return labelClass;
+    }
+
+    protected LabelType newLabel(String val){
+        try{
+            return  getLabelClass().getConstructor(String.class).newInstance(val);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected LabelType newLabel(int i){
+        try{
+            return  getLabelClass().getConstructor(int.class).newInstance(i);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

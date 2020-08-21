@@ -1,5 +1,6 @@
 package cn.edu.cug.cs.gtl.ml.dataset;
 
+import cn.edu.cug.cs.gtl.io.Storable;
 import jsat.linear.Vec;
 /**
  * Numerical data 具有实际测量bai的物理意义，比如人的身高、体重、duIQ、血压等zhi等，统计学中，Numerical data也称作quantitative data，Numerical data又分为两种类型：dao
@@ -10,6 +11,12 @@ import jsat.linear.Vec;
  *
  * Categorical data代表了被描述对象的性质，比如一个人的性别、婚姻状况、家乡等等， Categorical data 可以用Numerical data来表示，比如说描述性别时，1代表男，2代表女，但是这些数据并没有数学意义，你不能拿他做运算。Categorical data也叫作qualitative data或是Yes/No data。
  */
-public abstract class NumericalData extends Vec {
+public abstract class NumericalData extends Vec implements Storable {
 
+    @Override
+    public Vec clone(){
+        return null;
+    }
+
+    public abstract void reset(double[] array);
 }

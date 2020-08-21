@@ -3,12 +3,11 @@ package cn.edu.cug.cs.gtl.ml.distances;
 import cn.edu.cug.cs.gtl.array.Array;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
 import jsat.linear.Vec;
-import jsat.linear.distancemetrics.EuclideanDistance;
 
 import java.util.List;
 
-public interface DistanceMetric<T extends NumericalData> extends jsat.linear.distancemetrics.DistanceMetric{
-    double distance(T a, T b);
+public interface DistanceMetric<KernelType extends NumericalData> extends jsat.linear.distancemetrics.DistanceMetric{
+    double distance(Object a, Object b);
 
     /**
      * Computes the distance between 2 vectors.
@@ -20,7 +19,7 @@ public interface DistanceMetric<T extends NumericalData> extends jsat.linear.dis
      * @return the distance between them
      */
     default double dist(Vec a, Vec b){
-        return distance((T)a,(T)b);
+        return distance(a,b);
     }
     /**
      * 计算两个数据集合中每条时序数据对象之间的距离
@@ -32,15 +31,15 @@ public interface DistanceMetric<T extends NumericalData> extends jsat.linear.dis
      * s1中的第i条与s2中的第j条时序数据之间的距离为 a.get(j,i);
      * 获取s1中第i条与s2中所有时序数据对象的距离为一个n元列向量，也即 a.col(i)
      */
-    default Array distances(List<T> a, List<T> b) {
+    default Array distances(List<KernelType> a, List<KernelType> b) {
         int m = a.size();
         int n = b.size();
         double[] dist = new double[m * n];
         int k = 0;
         for (int i = 0; i < m; ++i) {
-            T s11 = a.get(i);
+            KernelType s11 = a.get(i);
             for (int j = 0; j < n; ++j) {
-                T s22 = b.get(j);
+                KernelType s22 = b.get(j);
                 dist[k] = distance(s11, s22);
                 ++k;
             }
@@ -58,15 +57,15 @@ public interface DistanceMetric<T extends NumericalData> extends jsat.linear.dis
      * s1中的第i条与s2中的第j条时序数据之间的距离为 a.get(j,i);
      * 获取s1中第i条与s2中所有时序数据对象的距离为一个n元列向量，也即 a.col(i)
      */
-    default Array distances(T[] a, T[] b) {
+    default Array distances(KernelType[] a, KernelType[] b) {
         int m = a.length;
         int n = b.length;
         double[] dist = new double[m * n];
         int k = 0;
         for (int i = 0; i < m; ++i) {
-            T s11 = a[i];
+            KernelType s11 = a[i];
             for (int j = 0; j < n; ++j) {
-                T s22 = b[j];
+                KernelType s22 = b[j];
                 dist[k] = distance(s11, s22);
                 ++k;
             }
@@ -96,7 +95,7 @@ public interface DistanceMetric<T extends NumericalData> extends jsat.linear.dis
     }
 
 
-    default DistanceMetric<T> clone(){
+    default DistanceMetric<KernelType> clone(){
         return null;
     }
 }
