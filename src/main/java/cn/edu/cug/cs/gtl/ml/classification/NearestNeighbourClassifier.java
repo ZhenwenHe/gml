@@ -20,6 +20,7 @@ public class NearestNeighbourClassifier<KernelType extends NumericalData, LabelT
      */
 
     public NearestNeighbourClassifier(int k, boolean weighted,DistanceMetric<KernelType> distanceMetric ) {
+        super(null,null,distanceMetric);
         nearestNeighbour=new NearestNeighbour(k,weighted,distanceMetric);
     }
 

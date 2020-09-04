@@ -139,11 +139,17 @@ public class DataSet<KernelType extends NumericalData> extends jsat.DataSet<Data
      * not be backed by the original data.
      */
     public List<Sample<KernelType>> getSampleList() {
-        return ((DataStore) datapoints).getSampleList();
+        try {
+            return (List<Sample<KernelType>>)((Object)(datapoints.toList()));
+        }
+        catch (ClassCastException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<Sample<KernelType>> getSamples() {
-        return ((DataStore) datapoints).getSampleList();
+        return getSampleList();
     }
 
     @Override

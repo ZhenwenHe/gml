@@ -11,15 +11,13 @@ import jsat.io.ARFFLoader;
 
 import java.io.File;
 
-public class ClassificationCrossValidationExample {
+public class ClassificationCrossValidationExample extends Example{
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args)
     {
-        String nominalPath = File.separator+"Users" + File.separator + "zhenwenhe" + File.separator
-                +"git" + File.separator + "data" + File.separator
-                +"weka" + File.separator ;
+        String nominalPath = getDataDirectory() ;
         File file = new File(nominalPath + "iris.arff");
         DataSet dataSet = ARFFLoader.loadArffFile(file);
 

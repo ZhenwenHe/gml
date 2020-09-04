@@ -2,7 +2,8 @@ package cn.edu.cug.cs.gtl.ml.distances;
 
 import cn.edu.cug.cs.gtl.array.Array;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
-import jsat.linear.Vec;
+import cn.edu.cug.cs.gtl.ml.dataset.Vector;
+import jsat.linear.*;
 
 import java.util.List;
 
@@ -19,7 +20,39 @@ public interface DistanceMetric<KernelType extends NumericalData> extends jsat.l
      * @return the distance between them
      */
     default double dist(Vec a, Vec b){
-        return distance(a,b);
+        Object ao=null;
+        Object bo=null;
+
+        if((a instanceof SubVector)||(b instanceof SubVector)) {
+            try {
+                throw new Exception("SubVector can not be used in DistanceMetric<KernelType extends NumericalData>");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        if(a instanceof VecPaired || a instanceof VecPairedComparable)
+            ao=(Object)((VecPaired)a).getVector();
+        else if(a instanceof VecWithNorm)
+            ao = (Object)((VecWithNorm)a).getBase();
+        else if(a instanceof DenseVector || a instanceof SparseVector)
+            ao = new Vector(b.arrayCopy());
+        else
+            ao=a;
+
+
+        if(b instanceof VecPaired || b instanceof VecPairedComparable)
+            bo=(Object)((VecPaired)b).getVector();
+        else if(b instanceof VecWithNorm)
+            bo = (Object)((VecWithNorm)b).getBase();
+        else if(b instanceof DenseVector|| b instanceof SparseVector)
+            bo = new Vector(b.arrayCopy());
+        else
+            bo=b;
+
+        return distance(ao,bo);
     }
     /**
      * 计算两个数据集合中每条时序数据对象之间的距离

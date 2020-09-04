@@ -10,15 +10,13 @@ import cn.edu.cug.cs.gtl.ml.io.ARFFReader;
 
 import java.io.File;
 
-public class NaiveBayesClassifierExample {
+public class NaiveBayesClassifierExample extends Example{
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args)
     {
-        String nominalPath = File.separator+"Users" + File.separator + "zhenwenhe" + File.separator
-                +"git" + File.separator + "data" + File.separator
-                +"weka" + File.separator ;
+        String nominalPath = getDataDirectory();
         File file = new File(nominalPath + "iris.arff");
         DataSet<Vector> dataSet = ARFFReader.read(file);
 

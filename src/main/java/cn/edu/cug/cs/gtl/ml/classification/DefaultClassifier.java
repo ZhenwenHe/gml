@@ -63,7 +63,7 @@ public abstract class DefaultClassifier<KernelType extends NumericalData, LabelT
         int count = 0;
         int i = 0;
         for (LabelType p : predictedLabels) {
-            if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p))
+            if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p.getName()))
                 count++;
             ++i;
         }

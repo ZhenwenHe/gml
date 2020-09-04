@@ -63,4 +63,16 @@ public class CategoricalInfo extends jsat.classifiers.CategoricalData{
         return copy;
     }
 
+    /**
+     * 根据名称查找下标
+     * @param optionName
+     * @return
+     */
+    public int indexOfOption(String optionName){
+        for(int i=0;i<getNumberOfOptions();++i){
+            if(optionName.equals(getOptionName(i)))
+                return i;
+        }
+        return -1;
+    }
 }

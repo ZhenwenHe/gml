@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * A simple example on loading up a data set.
  */
-public class ARFFReaderExample
+public class ARFFReaderExample extends Example
 {
 
     /**
@@ -16,9 +16,7 @@ public class ARFFReaderExample
      */
     public static void main(String[] args)
     {
-        String nominalPath = File.separator+"Users" + File.separator + "zhenwenhe" + File.separator
-                +"git" + File.separator + "data" + File.separator
-                +"weka" + File.separator ;
+        String nominalPath = getDataDirectory() ;
         File file = new File(nominalPath + "iris.arff");
         DataSet dataSet = ARFFReader.read(file);
         System.out.println("There are " + dataSet.getNumFeatures() + " features for this data set.");

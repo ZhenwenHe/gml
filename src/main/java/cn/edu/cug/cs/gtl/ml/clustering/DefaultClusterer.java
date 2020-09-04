@@ -55,7 +55,7 @@ public abstract class DefaultClusterer<KernelType extends NumericalData, LabelTy
         int count = 0;
         int i = 0;
         for (LabelType p : predictedLabels) {
-            if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p))
+            if (this.testSet.getSample(i).getCategoricalLabel(j).equals(p.getName()))
                 count++;
             ++i;
         }
