@@ -1,12 +1,11 @@
 package cn.edu.cug.cs.gtl.ml.examples;
 
-import cn.edu.cug.cs.gtl.ml.clustering.HamerlyKMeansClusterer;
+import cn.edu.cug.cs.gtl.ml.clustering.kmeans.HamerlyKMeansClusterer;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.Sample;
 import cn.edu.cug.cs.gtl.ml.dataset.Vector;
 import cn.edu.cug.cs.gtl.ml.io.ARFFReader;
-import jsat.linear.Vec;
 
 import java.io.File;
 import java.util.List;

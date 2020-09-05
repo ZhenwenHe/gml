@@ -29,7 +29,7 @@ public class NaiveBayesTest
     static private NaiveBayes nb;
     public NaiveBayesTest()
     {
-        GridDataGenerator gdg = new GridDataGenerator(new Normal(0, 0.05), new Random(12), 2,2);
+        GridDataGenerator gdg = new GridDataGenerator(new Normal(0, 0.05), new Random(12), 2);
         easyTrain = new ClassificationDataSet(gdg.generateData(40).getList(), 0);
         easyTest = new ClassificationDataSet(gdg.generateData(40).getList(), 0);
     }

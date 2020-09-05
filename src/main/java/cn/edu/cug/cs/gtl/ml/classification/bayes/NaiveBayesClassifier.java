@@ -1,5 +1,6 @@
-package cn.edu.cug.cs.gtl.ml.classification;
+package cn.edu.cug.cs.gtl.ml.classification.bayes;
 
+import cn.edu.cug.cs.gtl.ml.classification.DefaultClassifier;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
@@ -8,7 +9,7 @@ import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
 import jsat.classifiers.CategoricalResults;
 import jsat.classifiers.bayesian.NaiveBayes;
 
-public class NaiveBayesClassifier <KernelType extends NumericalData, LabelType extends Label> extends DefaultClassifier<KernelType, LabelType>{
+public class NaiveBayesClassifier <KernelType extends NumericalData, LabelType extends Label> extends DefaultClassifier<KernelType, LabelType> {
     NaiveBayes naiveBayes;
 
     public NaiveBayesClassifier() {

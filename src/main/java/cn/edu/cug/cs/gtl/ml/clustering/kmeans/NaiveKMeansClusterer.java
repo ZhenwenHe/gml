@@ -1,5 +1,6 @@
-package cn.edu.cug.cs.gtl.ml.clustering;
+package cn.edu.cug.cs.gtl.ml.clustering.kmeans;
 
+import cn.edu.cug.cs.gtl.ml.clustering.DefaultClusterer;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
@@ -10,7 +11,7 @@ import jsat.clustering.kmeans.NaiveKMeans;
 
 import java.util.List;
 
-public class NaiveKMeansClusterer <KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType>{
+public class NaiveKMeansClusterer <KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType> {
 
     NaiveKMeans naiveKMeans;
     int [] assignments;

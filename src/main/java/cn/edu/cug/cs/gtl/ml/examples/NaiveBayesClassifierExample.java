@@ -1,7 +1,7 @@
 package cn.edu.cug.cs.gtl.ml.examples;
 
 import cn.edu.cug.cs.gtl.ml.classification.Classifier;
-import cn.edu.cug.cs.gtl.ml.classification.NaiveBayesClassifier;
+import cn.edu.cug.cs.gtl.ml.classification.bayes.NaiveBayesClassifier;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.Sample;

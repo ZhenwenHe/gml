@@ -5,29 +5,27 @@ import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
 import cn.edu.cug.cs.gtl.ml.dataset.Sample;
 import cn.edu.cug.cs.gtl.ml.distances.DistanceMetric;
-import jsat.clustering.kmeans.ElkanKMeans;
+import jsat.clustering.ClustererBase;
+import jsat.clustering.MeanShift;
 import jsat.clustering.kmeans.KMeans;
 
 import java.util.List;
+
 /**
- * An efficient implementation of the K-Means algorithm. This implementation uses
- * the triangle inequality to accelerate computation while maintaining the exact
- * same solution. This requires that the {@link cn.edu.cug.cs.gtl.ml.distances.DistanceMetric} used support
- * isSubadditive().
- * <br>
- * Implementation based on the paper: Using the Triangle Inequality to Accelerate k-Means, by Charles Elkan
- *
+ * “Mean shift: A robust approach toward feature space analysis.” D. Comaniciu and P. Meer, IEEE Transactions on Pattern Analysis and Machine Intelligence (2002)
+ * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.8968&rep=rep1&type=pdf
+ * @param <KernelType>
+ * @param <LabelType>
  */
-public class ElkanKMeansClusterer <KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType>{
+public class MeanShiftClusterer <KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType> {
 
-    ElkanKMeans elkanKMeans;
     int [] assignments;
+    MeanShift meanShift;
 
-    public ElkanKMeansClusterer(DataSet<KernelType> dataSet, DistanceMetric<KernelType> distanceMetrics) {
+    public MeanShiftClusterer(DataSet<KernelType> dataSet, DistanceMetric<KernelType> distanceMetrics) {
         super(dataSet, distanceMetrics);
-        elkanKMeans=new ElkanKMeans(distanceMetrics);
+        meanShift=new MeanShift(distanceMetrics);
     }
-
 
     /**
      * 获取聚类结果
@@ -37,15 +35,14 @@ public class ElkanKMeansClusterer <KernelType extends NumericalData, LabelType e
     @Override
     public List<List<Sample<KernelType>>> getClusters() {
         if(assignments==null) return null;
-        return (List<List<Sample<KernelType>>>)((List)(KMeans.createClusterListFromAssignmentArray(assignments,trainSet)));
+        return (List<List<Sample<KernelType>>>)((List)(ClustererBase.createClusterListFromAssignmentArray(assignments,trainSet)));
     }
-
 
     @Override
     public void fit(DataSet<KernelType> dataSet) {
         super.fit(dataSet);
         assignments = new int[dataSet.size()];
-        elkanKMeans.cluster(dataSet,assignments);
+        meanShift.cluster(dataSet,assignments);
     }
 
     @Override

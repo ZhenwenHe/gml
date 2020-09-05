@@ -1,5 +1,6 @@
-package cn.edu.cug.cs.gtl.ml.classification;
+package cn.edu.cug.cs.gtl.ml.classification.knn;
 
+import cn.edu.cug.cs.gtl.ml.classification.DefaultClassifier;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
 import cn.edu.cug.cs.gtl.ml.dataset.Sample;

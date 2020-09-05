@@ -1,5 +1,6 @@
-package cn.edu.cug.cs.gtl.ml.clustering;
+package cn.edu.cug.cs.gtl.ml.clustering.kmeans;
 
+import cn.edu.cug.cs.gtl.ml.clustering.DefaultClusterer;
 import cn.edu.cug.cs.gtl.ml.dataset.DataSet;
 import cn.edu.cug.cs.gtl.ml.dataset.Label;
 import cn.edu.cug.cs.gtl.ml.dataset.NumericalData;
@@ -13,7 +14,7 @@ import jsat.linear.distancemetrics.EuclideanDistance;
 
 import java.util.List;
 
-public class HamerlyKMeansClusterer<KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType>{
+public class HamerlyKMeansClusterer<KernelType extends NumericalData, LabelType extends Label> extends DefaultClusterer<KernelType, LabelType> {
 
     HamerlyKMeans hamerlyKMeans;
     int [] assignments;

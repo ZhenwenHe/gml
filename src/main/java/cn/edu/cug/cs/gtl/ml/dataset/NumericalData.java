@@ -13,6 +13,8 @@ import jsat.linear.Vec;
  */
 public abstract class NumericalData extends Vec implements Storable {
 
+    private static final long serialVersionUID = 2544281479244485769L;
+
     @Override
     public Vec clone(){
         return null;
